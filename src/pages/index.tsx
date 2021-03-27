@@ -24,13 +24,23 @@ interface HomeProps {
   postsPagination: PostPagination;
 }
 
-// export default function Home() {
-//   // TODO
-// }
+const Home = ({ postsPagination }: HomeProps) => {
+  return (
+    <main className={styles.container}>
+      <img src="/img/logo.svg" alt="logo" />
+      <h1>Wolrd old on</h1>
+    </main>
+  );
+};
 
-// export const getStaticProps = async () => {
-//   // const prismic = getPrismicClient();
-//   // const postsResponse = await prismic.query(TODO);
+export default Home;
 
-//   // TODO
-// };
+export const getStaticProps: GetStaticProps = async () => {
+  const prismic = getPrismicClient();
+  // const postsResponse = await prismic.query(TODO);
+
+  // TODO
+  return {
+    props: {},
+  };
+};

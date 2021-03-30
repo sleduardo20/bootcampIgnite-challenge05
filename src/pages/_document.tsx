@@ -42,7 +42,6 @@ export default class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
             rel="stylesheet"
           />
-          <title>spacetravaling - Blog</title>
         </Head>
         <body>
           <Main />

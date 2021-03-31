@@ -1,10 +1,10 @@
+import { useEffect, useMemo, useState } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 
 import Prismic from '@prismicio/client';
 import { useRouter } from 'next/router';
 import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
 import { RichText } from 'prismic-dom';
-import React from 'react';
 import { getPrismicClient } from '../../services/prismic';
 
 import Header from '../../components/Header';
@@ -42,9 +42,27 @@ interface PostProps {
 export default function Post({ post }: PostProps) {
   const router = useRouter();
 
+  const [totalWordsPost, setTotalWordsPost] = useState([]);
+
   if (router.isFallback) {
     return <h2>Carregando...</h2>;
   }
+
+  useEffect(() => {
+    const wordsContent = post.data.content.reduce((acc, item, index) => {
+      acc[index] =
+        item.heading.split(' ').length +
+        RichText.asText(item.body).split(' ').length;
+
+      return acc;
+    }, []);
+
+    setTotalWordsPost(wordsContent);
+  }, [post.data.content]);
+
+  const totalWords = totalWordsPost.reduce((acc, word) => acc + word, 0);
+
+  const readingTime = Math.round(totalWords / 200);
 
   return (
     <S.Container>
@@ -68,7 +86,7 @@ export default function Post({ post }: PostProps) {
             {post.data.author}
           </span>
           <span>
-            <FiClock /> 4 min
+            <FiClock /> {readingTime} min
           </span>
         </Info>
 

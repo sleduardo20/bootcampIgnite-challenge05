@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 
 import Prismic from '@prismicio/client';
@@ -11,6 +11,7 @@ import Header from '../../components/Header';
 import * as S from './styles';
 import { getFormatDate } from '../../util/formatDate';
 import { Info } from '../styles';
+import Comments from '../../components/Comments';
 
 type Body = {
   text: string;
@@ -101,6 +102,7 @@ export default function Post({ post }: PostProps) {
           </S.Content>
         ))}
       </S.ContentContainer>
+      <Comments></Comments>
     </S.Container>
   );
 }

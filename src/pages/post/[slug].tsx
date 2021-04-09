@@ -12,6 +12,7 @@ import * as S from './styles';
 import { getFormatDate } from '../../util/formatDate';
 import { Info } from '../styles';
 import Comments from '../../components/Comments';
+import Link from 'next/link';
 
 type Body = {
   text: string;
@@ -38,9 +39,17 @@ interface Post {
 
 interface PostProps {
   post: Post;
+  previousPost: {
+    uid: string;
+    title: string;
+  }
+  nextPost: {
+    uid: string;
+    title: string;
+  }
 }
 
-export default function Post({ post }: PostProps) {
+export default function Post({ post,previousPost,nextPost }: PostProps) {
   const router = useRouter();
 
   const [totalWordsPost, setTotalWordsPost] = useState([]);
@@ -104,6 +113,19 @@ export default function Post({ post }: PostProps) {
         ))}
       </S.ContentContainer>
       <S.Divider />
+
+      {previousPost && (
+      <Link href={`/post/${previousPost.uid}`}>
+        <a> Post Anterior</a>
+      </Link>
+      )}
+
+
+      {nextPost && (
+      <Link href={`/post/${nextPost.uid}`}>
+        <a> Proximo Post</a>
+      </Link>
+      )}
       <Comments />
     </S.Container>
   );
@@ -141,17 +163,18 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   );
 
   const indexPostPrevious = results
-    .findIndex(post => post.uid === postResponse.uid ) - 1;
+    .findIndex(post => post.uid === postResponse.uid ) + 1;
 
-  const indexPostNext = results.findIndex(post => post.uid === postResponse.uid ) + 1;
+  const indexPostNext = results
+    .findIndex(post => post.uid === postResponse.uid ) - 1;
 
   const posts = results.map(item => ({
     uid: item.uid,
     title: item.data.title,
   }));
 
-  const previousPost = posts[indexPostPrevious];
-  const nextPost = posts[indexPostNext];
+  const previousPost = posts[indexPostPrevious] || null;
+  const nextPost = posts[indexPostNext] || null;
 
   console.log(previousPost);
   console.log(nextPost);
@@ -175,6 +198,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   return {
     props: {
       post,
+      previousPost,
+      nextPost
     },
   };
 };

@@ -49,10 +49,11 @@ export default function Post({ post }: PostProps) {
     return <h2>Carregando...</h2>;
   }
 
+
   useEffect(() => {
     const wordsContent = post.data.content.reduce((acc, item, index) => {
       acc[index] =
-        item.heading.split(' ').length +
+        item.heading ? (item.heading.split(' ').length): 0 +
         RichText.asText(item.body).split(' ').length;
 
       return acc;
@@ -102,7 +103,8 @@ export default function Post({ post }: PostProps) {
           </S.Content>
         ))}
       </S.ContentContainer>
-      <Comments></Comments>
+      <S.Divider />
+      <Comments />
     </S.Container>
   );
 }
@@ -132,21 +134,43 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const prismic = getPrismicClient();
 
-  const response = await prismic.getByUID('posts', String(slug), {});
+  const postResponse = await prismic.getByUID('posts', String(slug), {});
+
+  const { results } = await prismic.query(
+    [Prismic.predicates.at('document.type', 'posts')],{}
+  );
+
+  const indexPostPrevious = results
+    .findIndex(post => post.uid === postResponse.uid ) - 1;
+
+  const indexPostNext = results.findIndex(post => post.uid === postResponse.uid ) + 1;
+
+  const posts = results.map(item => ({
+    uid: item.uid,
+    title: item.data.title,
+  }));
+
+  const previousPost = posts[indexPostPrevious];
+  const nextPost = posts[indexPostNext];
+
+  console.log(previousPost);
+  console.log(nextPost);
 
   const post: Post = {
-    uid: response.uid,
-    first_publication_date: response.first_publication_date,
+    uid: postResponse.uid,
+    first_publication_date: postResponse.first_publication_date,
     data: {
-      title: response.data.title,
-      subtitle: response.data.subtitle,
+      title: postResponse.data.title,
+      subtitle: postResponse.data.subtitle,
       banner: {
-        url: response.data.banner.url,
+        url: postResponse.data.banner.url,
       },
-      author: response.data.author,
-      content: response.data.content,
+      author: postResponse.data.author,
+      content: postResponse.data.content,
     },
   };
+
+
 
   return {
     props: {

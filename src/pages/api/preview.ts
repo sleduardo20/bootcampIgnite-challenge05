@@ -1,5 +1,5 @@
 import Prismic from "@prismicio/client";
-import {} from '@prismicio/client/types/documents';
+import {Document} from '@prismicio/client/types/documents';
 
 
 function linkResolver(doc: Document): string {

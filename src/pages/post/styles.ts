@@ -89,3 +89,12 @@ export const Body = styled.div`
     }
   }
 `;
+
+export const Divider = styled.div`
+  width: 110rem;
+  height: 1px;
+
+  margin: 5rem auto;
+  background: #1b1717;
+
+`;

@@ -46,6 +46,7 @@ const Home = ({ postsPagination }: HomeProps, preview) => {
       },
     }));
 
+
     const newsPosts = [...results, ...posts];
 
     setResults(newsPosts);
@@ -67,7 +68,7 @@ const Home = ({ postsPagination }: HomeProps, preview) => {
             <S.Info>
               <span>
                 <FiCalendar />
-                {getFormatDate(post.first_publication_date)}
+                {post.first_publication_date}
               </span>
               <span>
                 <FiUser />
@@ -113,14 +114,13 @@ export const getStaticProps: GetStaticProps = async ({preview=false, previewData
 
   const results = postsResponse.results.map((post: Post) => ({
     uid: post.uid,
-    first_publication_date: post.first_publication_date,
+    first_publication_date: getFormatDate(post.first_publication_date),
     data: {
       title: post.data.title,
       subtitle: post.data.subtitle,
       author: post.data.author,
     },
   }));
-
 
 
   const postsPagination = {

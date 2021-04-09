@@ -1,7 +1,27 @@
 import styled from 'styled-components';
 
 export const Container = styled.main`
+
+
   padding: 6rem 0 8rem;
+
+  background: linear-gradient(-45deg, #151515, #1A1D23,#1e212d,#1b1717);
+    background-size: 400% 400%;
+    animation: gradient 4s ease infinite;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+  }
+
   h1 {
     font-size: 4.8rem;
     color: var(--heading);

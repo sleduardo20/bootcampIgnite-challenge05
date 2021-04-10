@@ -4,6 +4,15 @@ export const Container = styled.main`
   width: min(100%, 110rem);
   margin: 0 auto;
   padding: 8rem 2.5rem 8rem;
+
+  aside {
+    margin-top: 3.2rem;
+
+    a {
+      font-size: 1.4rem;
+      color: var(--hightlight);
+    }
+  }
 `;
 
 export const PostList = styled.ul`

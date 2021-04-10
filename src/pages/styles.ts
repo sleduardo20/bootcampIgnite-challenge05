@@ -36,8 +36,16 @@ export const Post = styled.li`
 export const Info = styled.div`
   margin-top: 2.4rem;
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  div {
+  display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
+  margin-bottom: 0.8rem;
+  }
 
   span {
     display: flex;
@@ -55,7 +63,7 @@ export const Info = styled.div`
     & + span {
       margin-left: 2.4rem;
     }
-  }
+   }
 `;
 
 export const ShowMore = styled.button`

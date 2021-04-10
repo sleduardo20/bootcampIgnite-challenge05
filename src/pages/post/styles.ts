@@ -98,3 +98,27 @@ export const Divider = styled.div`
   background: #1b1717;
 
 `;
+
+export const WrapperPosts = styled.div`
+  max-width: 110rem;
+  margin: 0 auto 4.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+export const LinkPost = styled.div`
+  strong {
+    display:block;
+    max-width: 32rem;
+    font-size: 2.4rem;
+    color: var(--heading);
+    font-weight: none;
+  }
+
+  a {
+    margin-top: 1.2rem;
+    font-size: 1.6rem;
+    color: var(--hightlight);
+  }
+`;

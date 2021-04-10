@@ -66,6 +66,8 @@ const Home = ({ postsPagination }: HomeProps, preview) => {
               </a>
             </Link>
             <S.Info>
+              <div>
+
               <span>
                 <FiCalendar />
                 {post.first_publication_date}
@@ -74,6 +76,7 @@ const Home = ({ postsPagination }: HomeProps, preview) => {
                 <FiUser />
                 {post.data.author}
               </span>
+              </div>
             </S.Info>
           </S.Post>
         ))}

@@ -25,6 +25,7 @@ type Content = {
 
 interface Post {
   first_publication_date: string | null;
+  last_publication_date: string | null;
   uid: string;
   data: {
     title: string;
@@ -88,6 +89,7 @@ export default function Post({ post,previousPost,nextPost }: PostProps) {
         <h1>{post.data.title} </h1>
 
         <Info>
+          <div>
           <span>
             <FiCalendar />
             {getFormatDate(post.first_publication_date)}
@@ -99,6 +101,10 @@ export default function Post({ post,previousPost,nextPost }: PostProps) {
           <span>
             <FiClock /> {readingTime} min
           </span>
+          </div>
+
+          <span>* editado em {getFormatDate(post.last_publication_date)}</span>
+
         </Info>
 
         {post.data.content.map(content => (
@@ -114,18 +120,30 @@ export default function Post({ post,previousPost,nextPost }: PostProps) {
       </S.ContentContainer>
       <S.Divider />
 
-      {previousPost && (
-      <Link href={`/post/${previousPost.uid}`}>
-        <a> Post Anterior</a>
-      </Link>
-      )}
+      <S.WrapperPosts>
 
+      {previousPost && (
+        <S.LinkPost>
+        <strong>{previousPost.title}</strong>
+            <Link href={`/post/${previousPost.uid}`}>
+              <a>
+              Post Anterior
+              </a>
+            </Link>
+        </S.LinkPost>
+      )}
 
       {nextPost && (
-      <Link href={`/post/${nextPost.uid}`}>
-        <a> Proximo Post</a>
-      </Link>
+        <S.LinkPost>
+          <strong>{nextPost.title}</strong>
+            <Link href={`/post/${nextPost.uid}`}>
+              <a>Proximo Post</a>
+            </Link>
+        </S.LinkPost>
       )}
+
+      </S.WrapperPosts>
+
       <Comments />
     </S.Container>
   );
@@ -156,17 +174,17 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const prismic = getPrismicClient();
 
-  const postResponse = await prismic.getByUID('posts', String(slug), {});
+  const postSelectedResponse = await prismic.getByUID('posts', String(slug), {});
 
   const { results } = await prismic.query(
     [Prismic.predicates.at('document.type', 'posts')],{}
   );
 
   const indexPostPrevious = results
-    .findIndex(post => post.uid === postResponse.uid ) + 1;
+    .findIndex(post => post.uid === postSelectedResponse.uid ) + 1;
 
   const indexPostNext = results
-    .findIndex(post => post.uid === postResponse.uid ) - 1;
+    .findIndex(post => post.uid === postSelectedResponse.uid ) - 1;
 
   const posts = results.map(item => ({
     uid: item.uid,
@@ -176,20 +194,18 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const previousPost = posts[indexPostPrevious] || null;
   const nextPost = posts[indexPostNext] || null;
 
-  console.log(previousPost);
-  console.log(nextPost);
-
   const post: Post = {
-    uid: postResponse.uid,
-    first_publication_date: postResponse.first_publication_date,
+    uid: postSelectedResponse.uid,
+    first_publication_date: postSelectedResponse.first_publication_date,
+    last_publication_date: postSelectedResponse.last_publication_date,
     data: {
-      title: postResponse.data.title,
-      subtitle: postResponse.data.subtitle,
+      title: postSelectedResponse.data.title,
+      subtitle: postSelectedResponse.data.subtitle,
       banner: {
-        url: postResponse.data.banner.url,
+        url: postSelectedResponse.data.banner.url,
       },
-      author: postResponse.data.author,
-      content: postResponse.data.content,
+      author: postSelectedResponse.data.author,
+      content: postSelectedResponse.data.content,
     },
   };
 
